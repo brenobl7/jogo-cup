@@ -1,2 +1,2 @@
 # jogo-cuphead
-repositorio do git hub
+repositorio do git hub.
