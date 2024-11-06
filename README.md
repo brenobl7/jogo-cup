@@ -1,2 +1,2 @@
-# jogo-cup
+# jogo-cuphead
 repositorio do git hub
