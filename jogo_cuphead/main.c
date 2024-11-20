@@ -10,6 +10,7 @@ int main()
     al_init();
     al_set_app_name("Dark Punch");
     al_init_image_addon();
+    al_install_mouse();
     ALLEGRO_DISPLAY* display = al_create_display(800, 600);
     al_set_window_position(display, 300, 100);
 
@@ -23,6 +24,7 @@ int main()
 
     al_register_event_source(event_queue,al_get_display_event_source(display));
     al_register_event_source(event_queue, al_get_timer_event_source(timer));
+    al_register_event_source(event_queue,al_get_mouse_event_source());
     al_start_timer(timer);
 
     //Loop principal
@@ -37,6 +39,23 @@ int main()
             break;
         }
 
+        //posição do mouse
+
+        int mouse_x = event.mouse.x;
+        int mouse_y = event.mouse.y;
+
+        //clica com o mouse no botão start
+
+        if(266<=mouse_x && mouse_x <=532 && 225<=mouse_y && mouse_y<=300){
+
+           if(event.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN && event.mouse.button == 1){
+
+                Menu = al_load_bitmap("./imagens/background.PNG");
+
+
+           }
+       }
+
         //Desenhando menu
 
         al_draw_bitmap(Menu,0,0,0);
@@ -47,6 +66,8 @@ int main()
 
     al_destroy_display(display);
     al_destroy_event_queue(event_queue);
+    al_destroy_bitmap(Menu);
+    al_destroy_timer(timer);
 
     return 0;
 }
