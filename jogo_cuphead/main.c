@@ -28,6 +28,9 @@ int main()
     al_register_event_source(event_queue,al_get_mouse_event_source());
     al_start_timer(timer);
 
+    //frame da sprite
+
+    float frame = 0.f;
     //Loop principal
 
     while(true){
@@ -60,10 +63,16 @@ int main()
            }
        }
 
-        //Desenhando menu
+        //Desenhando menu e sprite
+
+        frame = frame + 0.09;
+        if(frame >7){
+            frame = 0.f;
+        }
+
 
         al_draw_bitmap(Menu,0,0,0);
-        al_draw_bitmap(sprite,0,0,0);
+        al_draw_bitmap_region(sprite,180*(int)frame,250,180,180,0,380,0);
         al_flip_display();
     }
 
