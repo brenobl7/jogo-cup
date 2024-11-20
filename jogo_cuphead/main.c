@@ -19,6 +19,7 @@ int main()
     ALLEGRO_BITMAP* Menu = al_load_bitmap("./imagens/Menu.JPG");
     ALLEGRO_TIMER* timer = al_create_timer(1.0 / 60.0);
     ALLEGRO_EVENT_QUEUE *event_queue = al_create_event_queue();
+    ALLEGRO_BITMAP * sprite = al_load_bitmap("./imagens/teste.png");
 
     //Registrando Eventos
 
@@ -50,7 +51,10 @@ int main()
 
            if(event.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN && event.mouse.button == 1){
 
+                //mudando fundo e sprite
+
                 Menu = al_load_bitmap("./imagens/background.PNG");
+                sprite = al_load_bitmap("./imagens/sprite.JPG");
 
 
            }
@@ -59,6 +63,7 @@ int main()
         //Desenhando menu
 
         al_draw_bitmap(Menu,0,0,0);
+        al_draw_bitmap(sprite,0,0,0);
         al_flip_display();
     }
 
@@ -67,6 +72,7 @@ int main()
     al_destroy_display(display);
     al_destroy_event_queue(event_queue);
     al_destroy_bitmap(Menu);
+    al_destroy_bitmap(sprite);
     al_destroy_timer(timer);
 
     return 0;
