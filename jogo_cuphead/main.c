@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
-
+#include <allegro5/keyboard.h>
 int main()
 {
     //configurações básicas janela
@@ -13,7 +13,7 @@ int main()
     al_install_mouse();
     ALLEGRO_DISPLAY* display = al_create_display(800, 600);
     al_set_window_position(display, 300, 100);
-
+    al_install_keyboard();
     //declarando menu e timer
 
     ALLEGRO_BITMAP* Menu = al_load_bitmap("./imagens/Menu.JPG");
@@ -27,18 +27,32 @@ int main()
     al_register_event_source(event_queue, al_get_timer_event_source(timer));
     al_register_event_source(event_queue,al_get_mouse_event_source());
     al_start_timer(timer);
+    al_register_event_source(event_queue, al_get_keyboard_event_source());
 
+    //frame da sprite
+  int pos_x = 0, pos_y = 400;
+    int current_frame_y = 0;
+    float frame = 0.f;
     //Loop principal
 
     while(true){
-        ALLEGRO_EVENT event;
-        al_wait_for_event(event_queue,&event);
+    ALLEGRO_EVENT event;
+    al_wait_for_event(event_queue, &event);
+    if( event.type == ALLEGRO_EVENT_DISPLAY_CLOSE ){
+      break;
+    }else if( event.keyboard.keycode == ALLEGRO_KEY_RIGHT ){
+      current_frame_y = 200;
+      pos_x += 2;
+    }else if( event.keyboard.keycode == ALLEGRO_KEY_LEFT ){
+      current_frame_y = 25;
+      pos_x -= 2;
 
-        //clicar no x da janela
+    }else if( event.keyboard.keycode == ALLEGRO_KEY_UP+ALLEGRO_KEY_SPACE ){
+      current_frame_y = 230* 3;
+      pos_y -= 20;
+      al_rest(4.0);
 
-        if(event.type == ALLEGRO_EVENT_DISPLAY_CLOSE){
-            break;
-        }
+    }
 
         //posição do mouse
 
@@ -54,16 +68,25 @@ int main()
                 //mudando fundo e sprite
 
                 Menu = al_load_bitmap("./imagens/background.PNG");
-                sprite = al_load_bitmap("./imagens/sprite.JPG");
+                sprite = al_load_bitmap("./imagens/sprite2trans.PNG");
 
 
            }
        }
 
-        //Desenhando menu
+        //Desenhando menu e sprite
 
-        al_draw_bitmap(Menu,0,0,0);
-        al_draw_bitmap(sprite,0,0,0);
+
+        frame = frame + 0.09;
+        if(frame >7){
+            frame = 3.f;
+        }
+
+
+        al_draw_bitmap(Menu,0,0,0);                                      //altura
+
+
+        al_draw_bitmap_region(sprite, 180 * (int)frame, current_frame_y, 110, 160, pos_x, pos_y, 0);
         al_flip_display();
     }
 
