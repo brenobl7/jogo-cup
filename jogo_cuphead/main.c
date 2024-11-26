@@ -21,11 +21,11 @@ int main() {
     al_set_window_position(display, 300, 100);
 
     ALLEGRO_BITMAP* Menu = al_load_bitmap("./imagens/Menu.JPG");
-    ALLEGRO_BITMAP* sprite = al_load_bitmap("./imagens/sprite_final.PNG");
+    ALLEGRO_BITMAP* sprite = al_load_bitmap("./imagens/teste.PNG");
     ALLEGRO_TIMER* timer = al_create_timer(1.0 / 60.0);
     ALLEGRO_EVENT_QUEUE* event_queue = al_create_event_queue();
-    ALLEGRO_SAMPLE* menu_audio = al_load_sample("./audios/audio_menu_natal.ogg");
-    ALLEGRO_SAMPLE* jogo_audio = al_load_sample("./audios/audio_jogo_matue.ogg");
+    ALLEGRO_SAMPLE* menu_audio = al_load_sample("./audios/menu.OGG");
+    ALLEGRO_SAMPLE* jogo_audio = al_load_sample("./audios/boss1.OGG");
 
     if (!Menu || !sprite || !menu_audio || !jogo_audio) {
         printf("Erro ao carregar recursos.\n");
