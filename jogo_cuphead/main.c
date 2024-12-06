@@ -7,7 +7,7 @@
 #include <allegro5/allegro_acodec.h>
 
 int main() {
-    // InicializaÃ§Ãµes bÃ¡sicas
+    // Inicializações básicas
     al_init();
     al_set_app_name("Dark Punch");
     al_init_image_addon();
@@ -32,18 +32,18 @@ int main() {
         return -1;
     }
 
-    // VariÃ¡veis de controle
-    int pos_x = 100, pos_y = 400; // PosiÃ§Ã£o inicial do personagem
+    // Variáveis de controle
+    int pos_x = 100, pos_y = 400; // Posição inicial do personagem
     int current_frame_y = 240;    // Coordenada inicial do estado parado
-    float frame = 0.0;            // Controle de animaÃ§Ã£o
+    float frame = 0.0;            // Controle de animação
     float vel_y = 0;              // Velocidade vertical
     float gravity = 0.5;          // Gravidade
     bool is_jumping = false;      // Estado de pulo
     bool is_attacking = false;    // Estado de ataque
-    bool facing_left = false;     // DireÃ§Ã£o do personagem
+    bool facing_left = false;     // Direção do personagem
     bool moving_left = false;     // Movimento para esquerda
     bool moving_right = false;    // Movimento para direita
-    const int ground_y = 400;     // Altura do chÃ£o
+    const int ground_y = 400;     // Altura do chão
     bool in_menu = true;          // Estado do menu
 
     // Configurando eventos
@@ -53,7 +53,7 @@ int main() {
     al_register_event_source(event_queue, al_get_keyboard_event_source());
     al_start_timer(timer);
 
-    // Configurar reproduÃ§Ã£o de Ã¡udio
+    // Configurar reprodução de áudio
     al_reserve_samples(2);
     al_play_sample(menu_audio, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, NULL); // Loop no menu
 
@@ -74,7 +74,7 @@ int main() {
             if (266 <= mouse_x && mouse_x <= 532 && 225 <= mouse_y && mouse_y <= 300) {
                 if (event.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN && event.mouse.button == 1) {
                     in_menu = false;
-                    al_stop_samples(); // Para o Ã¡udio do menu
+                    al_stop_samples(); // Para o áudio do menu
                     al_play_sample(jogo_audio, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, NULL); // Loop no jogo
 
                     // Carrega os recursos do jogo
@@ -88,7 +88,7 @@ int main() {
                 // Volta para o menu ao pressionar ESC
                 if (event.keyboard.keycode == ALLEGRO_KEY_ESCAPE) {
                     in_menu = true;
-                    al_stop_samples(); // Para o Ã¡udio do jogo
+                    al_stop_samples(); // Para o áudio do jogo
                     al_play_sample(menu_audio, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, NULL); // Loop no menu
 
                     // Restaura o estado inicial
@@ -119,13 +119,13 @@ int main() {
                 // Controle do ataque
                 if (event.keyboard.keycode == ALLEGRO_KEY_X && !is_attacking) {
                     is_attacking = true;
-                    frame = 0; // InÃ­cio da animaÃ§Ã£o de ataque
-                    current_frame_y = facing_left ? 1340 : 1500; // Ataque para a direÃ§Ã£o correta
+                    frame = 0; // Início da animação de ataque
+                    current_frame_y = facing_left ? 1340 : 1500; // Ataque para a direção correta
                 }
             }
 
             if (event.type == ALLEGRO_EVENT_KEY_UP) {
-                // Libera o movimento apÃ³s soltar as teclas de direÃ§Ã£o
+                // Libera o movimento após soltar as teclas de direção
                 if (event.keyboard.keycode == ALLEGRO_KEY_RIGHT) {
                     moving_right = false;
                 }
@@ -134,13 +134,13 @@ int main() {
                 }
             }
 
-            // AtualizaÃ§Ã£o da posiÃ§Ã£o apenas se nÃ£o estiver atacando
+            // Atualização da posição apenas se não estiver atacando
             if (!is_attacking) {
                 if (moving_right) pos_x += 2;
                 if (moving_left) pos_x -= 2;
             }
 
-            // Controle de fÃ­sica do pulo
+            // Controle de física do pulo
             if (is_jumping) {
                 pos_y += vel_y;
                 vel_y += gravity;
@@ -151,12 +151,12 @@ int main() {
                 }
             }
 
-            // AnimaÃ§Ã£o de ataque
+            // Animação de ataque
             if (is_attacking) {
                 frame += 0.2;
-                if (frame >= 6) { // Finaliza o ataque apÃ³s 6 frames
+                if (frame >= 6) { // Finaliza o ataque após 6 frames
                     is_attacking = false; // Termina o ataque
-                    frame = 0; // Reseta a animaÃ§Ã£o
+                    frame = 0; // Reseta a animação
 
                     // Retorna ao estado parado ou andando
                     if (moving_right) {
@@ -172,15 +172,15 @@ int main() {
             // Estado parado
             if (!moving_left && !moving_right && !is_jumping && !is_attacking) {
                 current_frame_y = 380;
-                frame = 0; // Reseta a animaÃ§Ã£o
+                frame = 0; // Reseta a animação
             } else if (!is_attacking) {
-                // AnimaÃ§Ã£o de movimento
+                // Animação de movimento
                 frame += 0.07;
                 if (frame > 6) frame = 3.0;
             }
         }
 
-        // RenderizaÃ§Ã£o
+        // Renderização
         al_clear_to_color(al_map_rgb(0, 0, 0));
 
         if (in_menu) {
