@@ -79,7 +79,7 @@ int main() {
 
                     // Carrega os recursos do jogo
                     Menu = al_load_bitmap("./imagens/background.PNG");
-                    sprite = al_load_bitmap("./imagens/sprite_final.PNG");
+                    sprite = al_load_bitmap("./imagens/sprite_certas.PNG");
                 }
             }
         } else {
@@ -93,7 +93,7 @@ int main() {
 
                     // Restaura o estado inicial
                     Menu = al_load_bitmap("./imagens/Menu.JPG");
-                    sprite = al_load_bitmap("./imagens/sprite_final.PNG");
+                    sprite = al_load_bitmap("./imagens/sprite_certasl.PNG");
                 }
 
                 // Controle do pulo
