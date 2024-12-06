@@ -33,7 +33,7 @@ int main() {
     }
 
     // Variáveis de controle
-    int pos_x = 100, pos_y = 400; // Posição inicial do personagem
+    int pos_x = 300, pos_y = 400; // Posição inicial do personagem
     int current_frame_y = 240;    // Coordenada inicial do estado parado
     float frame = 0.0;            // Controle de animação
     float vel_y = 0;              // Velocidade vertical
