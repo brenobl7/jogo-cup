@@ -51,7 +51,7 @@ int main() {
     float frame_lobo = 0.0;        // frame do lobo
     int current_frame_y_lobo = 179;  // imagem atual
     int tamanhos = 10; // limitador de sprite
-    bool lobo_direita = false,lobo_esquerda = false, lobo_ataque = false, ultimo_clique = NULL; // variaveis de movimento
+    bool lobo_direita = false,lobo_esquerda = false, lobo_ataque = false, ultimo_clique = NULL ,lobo_vivo =true; // variaveis de movimento
     int largura_lobo = 138 ;//  largura da sprite lobo
     int vida_samurai = 200; //vida do samurai
     int vida_lobo = 100; //vida lobo
@@ -178,12 +178,12 @@ int main() {
                         current_frame_y = 380; // Estado parado
                     }
                 }
-                if (facing_left==true && pos_x-70 <=lobo_x+40 && lobo_x <= pos_x-10 ){//ataque esquerda
+                if (facing_left==true && pos_x-70 <=lobo_x+40 && lobo_x <= pos_x-10 && lobo_vivo ){//ataque esquerda
                     vida_lobo -= 0.5;
                     printf("%d\n", vida_lobo);
 
                 }
-                 if (facing_left==false ){//ataque direita (fazer)
+                 if (facing_left==false && pos_x+90 >=lobo_x-40 && lobo_x >= pos_x+10 && lobo_vivo ){//ataque direita (fazer)
                     vida_lobo -= 0.5;
                     printf("%d\n", vida_lobo);
 
@@ -244,7 +244,7 @@ int main() {
                 current_frame_y_lobo = 281;
                 lobo_y = 450;
             }
-            if(!lobo_direita && !lobo_esquerda && lobo_ataque){
+            if(!lobo_direita && !lobo_esquerda && lobo_ataque && lobo_vivo){
                 if(!ultimo_clique){
                     current_frame_y_lobo = 964;
                     largura_lobo = 150;
@@ -266,7 +266,12 @@ int main() {
 
             al_draw_bitmap(Menu, 0, 0, 0);
             al_draw_bitmap_region(sprite, 180 * (int)frame, current_frame_y, 150, 160, pos_x, pos_y, 0);// Desenha o personagem
-            al_draw_bitmap_region(lobo,largura_lobo*(int)frame_lobo,current_frame_y_lobo,130,120,(int)lobo_x,(int)lobo_y,0);
+            if(vida_lobo>0){
+                al_draw_bitmap_region(lobo,largura_lobo*(int)frame_lobo,current_frame_y_lobo,130,120,(int)lobo_x,(int)lobo_y,0);
+
+            }else{
+                lobo_vivo = false;
+            }
         }
         al_flip_display();
     }
@@ -279,7 +284,7 @@ int main() {
     al_destroy_timer(timer);
     al_destroy_sample(menu_audio);
     al_destroy_sample(jogo_audio);
-    al_destroy_sample(lobo);
+    al_destroy_bitmap(lobo);
 
     return 0;
 }
