@@ -499,7 +499,7 @@
 	"allegro5/allegro.h"
 	"allegro5/allegro_audio.h"
 
-1733678306 source:c:\users\ksian\onedrive\Área de trabalho\programação\jogo-cuphead\jogo_cuphead\main.c
+1733782689 source:c:\users\ksian\onedrive\Área de trabalho\programação\jogo-cuphead\jogo_cuphead\main.c
 	<stdio.h>
 	<stdlib.h>
 	<allegro5/allegro.h>
@@ -507,4 +507,13 @@
 	<allegro5/keyboard.h>
 	<allegro5/allegro_audio.h>
 	<allegro5/allegro_acodec.h>
+	<allegro5/allegro_font.h>
+	<allegro5/allegro_ttf.h>
+
+1372639132 c:\allegro\allegromingw\include\allegro5\allegro_font.h
+	"allegro5/allegro.h"
+
+1362338300 c:\allegro\allegromingw\include\allegro5\allegro_ttf.h
+	"allegro5/allegro.h"
+	"allegro5/allegro_font.h"
 

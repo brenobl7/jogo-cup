@@ -5,7 +5,8 @@
 #include <allegro5/keyboard.h>
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_acodec.h>
-
+#include <allegro5/allegro_font.h>
+#include <allegro5/allegro_ttf.h>
 int main() {
     // Inicializações básicas
     al_init();
@@ -15,6 +16,8 @@ int main() {
     al_install_keyboard();
     al_install_audio();
     al_init_acodec_addon();
+    al_init_font_addon();
+    al_init_ttf_addon();
 
     // Recursos do jogo
     ALLEGRO_DISPLAY* display = al_create_display(800, 600);
@@ -27,6 +30,8 @@ int main() {
     ALLEGRO_EVENT_QUEUE* event_queue = al_create_event_queue();
     ALLEGRO_SAMPLE* menu_audio = al_load_sample("./audios/menu.OGG");
     ALLEGRO_SAMPLE* jogo_audio = al_load_sample("./audios/boss1.OGG");
+    ALLEGRO_FONT* fonte = al_load_font("./fonte.ttf",30,0);
+    ALLEGRO_FONT* vida = al_load_font("./fonte.ttf",30,0);
 
     if (!Menu || !sprite || !menu_audio || !jogo_audio) {
         printf("Erro ao carregar recursos.\n");
@@ -51,9 +56,11 @@ int main() {
     float frame_lobo = 0.0;        // frame do lobo
     int current_frame_y_lobo = 179;  // imagem atual
     int tamanhos = 10; // limitador de sprite
-    bool lobo_direita = false,lobo_esquerda = false, lobo_ataque = false, ultimo_clique = NULL; // variaveis de movimento
+    bool lobo_direita = false,lobo_esquerda = false, lobo_ataque = false, ultimo_clique = NULL ; // variaveis de movimento
     int largura_lobo = 138 ;//  largura da sprite lobo
     int vida_samurai = 200; //vida do samurai
+    int vida_lobo = 100; //vida lobo
+    int horda_lobos = 1, i, contador = 0;
 
     // Configurando eventos
     al_register_event_source(event_queue, al_get_display_event_source(display));
@@ -177,6 +184,16 @@ int main() {
                         current_frame_y = 380; // Estado parado
                     }
                 }
+                if (facing_left==true && pos_x-70 <=lobo_x+40 && lobo_x <= pos_x-10 ){//ataque esquerda
+                    vida_lobo -= 0.5;
+
+
+                }
+                 if (facing_left==false && pos_x+90 >=lobo_x-40 && lobo_x >= pos_x+10 ){//ataque direita (fazer)
+                    vida_lobo -= 0.5;
+
+
+                }
             }
 
             // Estado parado
@@ -191,7 +208,6 @@ int main() {
         }
         // Renderização
         al_clear_to_color(al_map_rgb(0, 0, 0));
-
         if (in_menu) {
             al_draw_bitmap(Menu, 0, 0, 0);
         } else {
@@ -203,21 +219,21 @@ int main() {
                 frame_lobo = 1.0;
             }
 
-            if(lobo_x<pos_x){
+            if(lobo_x<pos_x-10){
                 lobo_direita = true;
                 lobo_esquerda = false;
                 lobo_ataque = false;
                 ultimo_clique = true;
                 largura_lobo = 138;
 
-            }else if(lobo_x>pos_x){
+            }else if(lobo_x>pos_x+50){
                 lobo_direita = false;
                 lobo_esquerda = true;
                 lobo_ataque = false;
                 ultimo_clique = false;
                 largura_lobo = 138;
 
-            }else if(lobo_x< pos_x+30 && lobo_x >pos_x-30){
+            }else if(lobo_x == pos_x-10 || lobo_x == pos_x+50){
                 lobo_ataque = true;
                 lobo_direita = false;
                 lobo_esquerda = false;
@@ -233,7 +249,7 @@ int main() {
                 current_frame_y_lobo = 281;
                 lobo_y = 450;
             }
-            if(!lobo_direita && !lobo_esquerda && lobo_ataque){
+            if(!lobo_direita && !lobo_esquerda && lobo_ataque ){
                 if(!ultimo_clique){
                     current_frame_y_lobo = 964;
                     largura_lobo = 150;
@@ -255,9 +271,28 @@ int main() {
 
             al_draw_bitmap(Menu, 0, 0, 0);
             al_draw_bitmap_region(sprite, 180 * (int)frame, current_frame_y, 150, 160, pos_x, pos_y, 0);// Desenha o personagem
+            if(vida_lobo<=0){
+                lobo_direita = false;
+                lobo_ataque = false;
+                lobo_esquerda = false;
+                ultimo_clique = false;
+                vida_lobo = 100;
+                int k = rand() % 2;
+                if (k == 0){
+                    lobo_x = -100;
+                }
+                if (k == 1){
+                    lobo_x = +800;
+                }
+                contador +=1;
+
+            }
+            al_draw_textf(fonte,al_map_rgb(255,255,255),20,20,0,"SCORE: %d",contador);
+            al_draw_textf(vida,al_map_rgb(255,255,255),550,20,0,"VIDA: %d",vida_samurai);
             al_draw_bitmap_region(lobo,largura_lobo*(int)frame_lobo,current_frame_y_lobo,130,120,(int)lobo_x,(int)lobo_y,0);
         }
         al_flip_display();
+
     }
 
     // Fecha tuso
@@ -268,6 +303,9 @@ int main() {
     al_destroy_timer(timer);
     al_destroy_sample(menu_audio);
     al_destroy_sample(jogo_audio);
+    al_destroy_bitmap(lobo);
+    al_destroy_font(fonte);
+    al_destroy_font(vida);
 
     return 0;
 }
