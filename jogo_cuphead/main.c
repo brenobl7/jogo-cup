@@ -5,9 +5,10 @@
 #include <allegro5/keyboard.h>
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_acodec.h>
-
+#include <allegro5/allegro_font.h>
+#include <allegro5/allegro_ttf.h>
 int main() {
-    // Inicializações básicas
+    // Inicializaï¿½ï¿½es bï¿½sicas
     al_init();
     al_set_app_name("Dark Punch");
     al_init_image_addon();
@@ -15,6 +16,8 @@ int main() {
     al_install_keyboard();
     al_install_audio();
     al_init_acodec_addon();
+    al_init_font_addon();
+    al_init_ttf_addon();
 
     // Recursos do jogo
     ALLEGRO_DISPLAY* display = al_create_display(800, 600);
@@ -27,34 +30,37 @@ int main() {
     ALLEGRO_EVENT_QUEUE* event_queue = al_create_event_queue();
     ALLEGRO_SAMPLE* menu_audio = al_load_sample("./audios/menu.OGG");
     ALLEGRO_SAMPLE* jogo_audio = al_load_sample("./audios/boss1.OGG");
+    ALLEGRO_FONT* fonte = al_load_font("./fonte.ttf",30,0);
+    ALLEGRO_FONT* vida = al_load_font("./fonte.ttf",30,0);
 
     if (!Menu || !sprite || !menu_audio || !jogo_audio) {
         printf("Erro ao carregar recursos.\n");
         return -1;
     }
 
-    // Variáveis de controle
+    // Variï¿½veis de controle
 
-    int pos_x = 300, pos_y = 400; // Posição inicial do personagem
+    int pos_x = 300, pos_y = 400; // Posiï¿½ï¿½o inicial do personagem
     int current_frame_y = 240;    // Coordenada inicial do estado parado
-    float frame = 0.0;            // Controle de animação
+    float frame = 0.0;            // Controle de animaï¿½ï¿½o
     float vel_y = 0;              // Velocidade vertical
     float gravity = 0.5;          // Gravidade
     bool is_jumping = false;      // Estado de pulo
     bool is_attacking = false;    // Estado de ataque
-    bool facing_left = false;     // Direção do personagem
+    bool facing_left = false;     // Direï¿½ï¿½o do personagem
     bool moving_left = false;     // Movimento para esquerda
     bool moving_right = false;    // Movimento para direita
-    const int ground_y = 400;     // Altura do chão
+    const int ground_y = 400;     // Altura do chï¿½o
     bool in_menu = true;          // Estado do menu
-    int lobo_x = -50,lobo_y = 450;  //posições iniciais do lobo
+    int lobo_x = -50,lobo_y = 450;  //posiï¿½ï¿½es iniciais do lobo
     float frame_lobo = 0.0;        // frame do lobo
     int current_frame_y_lobo = 179;  // imagem atual
     int tamanhos = 10; // limitador de sprite
-    bool lobo_direita = false,lobo_esquerda = false, lobo_ataque = false, ultimo_clique = NULL ,lobo_vivo =true; // variaveis de movimento
+    bool lobo_direita = false,lobo_esquerda = false, lobo_ataque = false, ultimo_clique = NULL ; // variaveis de movimento
     int largura_lobo = 138 ;//  largura da sprite lobo
     int vida_samurai = 200; //vida do samurai
     int vida_lobo = 100; //vida lobo
+    int contador = 0;
 
     // Configurando eventos
     al_register_event_source(event_queue, al_get_display_event_source(display));
@@ -63,7 +69,7 @@ int main() {
     al_register_event_source(event_queue, al_get_keyboard_event_source());
     al_start_timer(timer);
 
-    // Configurar reprodução de áudio
+    // Configurar reproduï¿½ï¿½o de ï¿½udio
     al_reserve_samples(2);
     al_play_sample(menu_audio, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, NULL); // Loop no menu
 
@@ -84,7 +90,7 @@ int main() {
             if (266 <= mouse_x && mouse_x <= 532 && 225 <= mouse_y && mouse_y <= 300) {
                 if (event.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN && event.mouse.button == 1) {
                     in_menu = false;
-                    al_stop_samples(); // Para o áudio do menu
+                    al_stop_samples(); // Para o ï¿½udio do menu
                     al_play_sample(jogo_audio, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, NULL); // Loop no jogo
 
                     // Carrega os recursos do jogo
@@ -99,7 +105,10 @@ int main() {
                 // Volta para o menu ao pressionar ESC
                 if (event.keyboard.keycode == ALLEGRO_KEY_ESCAPE) {
                     in_menu = true;
-                    al_stop_samples(); // Para o áudio do jogo
+                    vida_lobo = 100;
+                    vida_samurai = 200;
+                    contador = 0;
+                    al_stop_samples(); // Para o ï¿½udio do jogo
                     al_play_sample(menu_audio, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, NULL); // Loop no menu
 
                     // Restaura o estado inicial
@@ -130,13 +139,13 @@ int main() {
                 // Controle do ataque
                 if (event.keyboard.keycode == ALLEGRO_KEY_X && !is_attacking) {
                     is_attacking = true;
-                    frame = 0; // Início da animação de ataque
-                    current_frame_y = facing_left ? 1340 : 1500; // Ataque para a direção correta
+                    frame = 0; // Inï¿½cio da animaï¿½ï¿½o de ataque
+                    current_frame_y = facing_left ? 1340 : 1500; // Ataque para a direï¿½ï¿½o correta
                 }
             }
 
             if (event.type == ALLEGRO_EVENT_KEY_UP) {
-                // Libera o movimento após soltar as teclas de direção
+                // Libera o movimento apï¿½s soltar as teclas de direï¿½ï¿½o
                 if (event.keyboard.keycode == ALLEGRO_KEY_RIGHT) {
                     moving_right = false;
                 }
@@ -145,13 +154,13 @@ int main() {
                 }
             }
 
-            // Atualização da posição apenas se não estiver atacando
+            // Atualizaï¿½ï¿½o da posiï¿½ï¿½o apenas se nï¿½o estiver atacando
             if (!is_attacking) {
                 if (moving_right) pos_x += 2;
                 if (moving_left) pos_x -= 2;
             }
 
-            // Controle de física do pulo
+            // Controle de fï¿½sica do pulo
             if (is_jumping) {
                 pos_y += vel_y;
                 vel_y += gravity;
@@ -162,12 +171,12 @@ int main() {
                 }
             }
 
-            // Animação de ataque
+            // Animaï¿½ï¿½o de ataque
             if (is_attacking) {
                 frame += 0.2;
-                if (frame >= 6) { // Finaliza o ataque após 6 frames
+                if (frame >= 6) { // Finaliza o ataque apï¿½s 6 frames
                     is_attacking = false; // Termina o ataque
-                    frame = 0; // Reseta a animação
+                    frame = 0; // Reseta a animaï¿½ï¿½o
 
                     // Retorna ao estado parado ou andando
                     if (moving_right) {
@@ -178,14 +187,14 @@ int main() {
                         current_frame_y = 380; // Estado parado
                     }
                 }
-                if (facing_left==true && pos_x-70 <=lobo_x+40 && lobo_x <= pos_x-10 && lobo_vivo ){//ataque esquerda
+                if (facing_left==true && pos_x-70 <=lobo_x+40 && lobo_x <= pos_x-10 ){//ataque esquerda
                     vida_lobo -= 0.5;
-                    printf("%d\n", vida_lobo);
+
 
                 }
-                 if (facing_left==false && pos_x+90 >=lobo_x-40 && lobo_x >= pos_x+10 && lobo_vivo ){//ataque direita (fazer)
+                 if (facing_left==false && pos_x+90 >=lobo_x-40 && lobo_x >= pos_x+10 ){//ataque direita (fazer)
                     vida_lobo -= 0.5;
-                    printf("%d\n", vida_lobo);
+
 
                 }
             }
@@ -193,16 +202,15 @@ int main() {
             // Estado parado
             if (!moving_left && !moving_right && !is_jumping && !is_attacking) {
                 current_frame_y = 380;
-                frame = 0; // Reseta a animação
+                frame = 0; // Reseta a animaï¿½ï¿½o
             } else if (!is_attacking) {
-                // Animação de movimento
+                // Animaï¿½ï¿½o de movimento
                 frame += 0.07;
                 if (frame > 6) frame = 3.0;
             }
         }
-        // Renderização
+        // Renderizaï¿½ï¿½o
         al_clear_to_color(al_map_rgb(0, 0, 0));
-
         if (in_menu) {
             al_draw_bitmap(Menu, 0, 0, 0);
         } else {
@@ -244,7 +252,7 @@ int main() {
                 current_frame_y_lobo = 281;
                 lobo_y = 450;
             }
-            if(!lobo_direita && !lobo_esquerda && lobo_ataque && lobo_vivo){
+            if(!lobo_direita && !lobo_esquerda && lobo_ataque ){
                 if(!ultimo_clique){
                     current_frame_y_lobo = 964;
                     largura_lobo = 150;
@@ -266,14 +274,35 @@ int main() {
 
             al_draw_bitmap(Menu, 0, 0, 0);
             al_draw_bitmap_region(sprite, 180 * (int)frame, current_frame_y, 150, 160, pos_x, pos_y, 0);// Desenha o personagem
-            if(vida_lobo>0){
-                al_draw_bitmap_region(lobo,largura_lobo*(int)frame_lobo,current_frame_y_lobo,130,120,(int)lobo_x,(int)lobo_y,0);
+            if(vida_lobo<=0){
+                lobo_direita = false;
+                lobo_ataque = false;
+                lobo_esquerda = false;
+                ultimo_clique = false;
+                vida_lobo = 100;
+                int k = rand() % 2;
+                if (k == 0){
+                    lobo_x = -100;
+                }
+                if (k == 1){
+                    lobo_x = +800;
+                }
+                contador +=1;
 
-            }else{
-                lobo_vivo = false;
             }
+            al_draw_textf(fonte,al_map_rgb(255,255,255),20,20,0,"SCORE: %d",contador);
+            if(vida_samurai>=100){
+
+                al_draw_textf(vida,al_map_rgb(0,255,0),550,20,0,"VIDA: %d",vida_samurai);
+            }
+            if(vida_samurai<100){
+                al_draw_textf(vida,al_map_rgb(255,0,0),550,20,0,"VIDA: %d",vida_samurai);
+            }
+
+            al_draw_bitmap_region(lobo,largura_lobo*(int)frame_lobo,current_frame_y_lobo,130,120,(int)lobo_x,(int)lobo_y,0);
         }
         al_flip_display();
+
     }
 
     // Fecha tuso
@@ -285,6 +314,8 @@ int main() {
     al_destroy_sample(menu_audio);
     al_destroy_sample(jogo_audio);
     al_destroy_bitmap(lobo);
+    al_destroy_font(fonte);
+    al_destroy_font(vida);
 
     return 0;
 }
