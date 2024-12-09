@@ -54,6 +54,7 @@ int main() {
     bool lobo_direita = false,lobo_esquerda = false, lobo_ataque = false, ultimo_clique = NULL; // variaveis de movimento
     int largura_lobo = 138 ;//  largura da sprite lobo
     int vida_samurai = 200; //vida do samurai
+    int vida_lobo = 100; //vida lobo
 
     // Configurando eventos
     al_register_event_source(event_queue, al_get_display_event_source(display));
@@ -177,6 +178,16 @@ int main() {
                         current_frame_y = 380; // Estado parado
                     }
                 }
+                if (facing_left==true && pos_x-70 <=lobo_x+40 && lobo_x <= pos_x-10 ){//ataque esquerda
+                    vida_lobo -= 0.5;
+                    printf("%d\n", vida_lobo);
+
+                }
+                 if (facing_left==false ){//ataque direita (fazer)
+                    vida_lobo -= 0.5;
+                    printf("%d\n", vida_lobo);
+
+                }
             }
 
             // Estado parado
@@ -203,21 +214,21 @@ int main() {
                 frame_lobo = 1.0;
             }
 
-            if(lobo_x<pos_x){
+            if(lobo_x<pos_x-10){
                 lobo_direita = true;
                 lobo_esquerda = false;
                 lobo_ataque = false;
                 ultimo_clique = true;
                 largura_lobo = 138;
 
-            }else if(lobo_x>pos_x){
+            }else if(lobo_x>pos_x+50){
                 lobo_direita = false;
                 lobo_esquerda = true;
                 lobo_ataque = false;
                 ultimo_clique = false;
                 largura_lobo = 138;
 
-            }else if(lobo_x< pos_x+30 && lobo_x >pos_x-30){
+            }else if(lobo_x == pos_x-10 || lobo_x == pos_x+50){
                 lobo_ataque = true;
                 lobo_direita = false;
                 lobo_esquerda = false;
@@ -268,6 +279,7 @@ int main() {
     al_destroy_timer(timer);
     al_destroy_sample(menu_audio);
     al_destroy_sample(jogo_audio);
+    al_destroy_sample(lobo);
 
     return 0;
 }
