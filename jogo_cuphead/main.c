@@ -60,7 +60,7 @@ int main() {
     int largura_lobo = 138 ;//  largura da sprite lobo
     int vida_samurai = 200; //vida do samurai
     int vida_lobo = 100; //vida lobo
-    int horda_lobos = 1, i, contador = 0;
+    int contador = 0;
 
     // Configurando eventos
     al_register_event_source(event_queue, al_get_display_event_source(display));
@@ -288,7 +288,14 @@ int main() {
 
             }
             al_draw_textf(fonte,al_map_rgb(255,255,255),20,20,0,"SCORE: %d",contador);
-            al_draw_textf(vida,al_map_rgb(255,255,255),550,20,0,"VIDA: %d",vida_samurai);
+            if(vida_samurai>=100){
+
+                al_draw_textf(vida,al_map_rgb(0,255,0),550,20,0,"VIDA: %d",vida_samurai);
+            }
+            if(vida_samurai<100){
+                al_draw_textf(vida,al_map_rgb(255,0,0),550,20,0,"VIDA: %d",vida_samurai);
+            }
+
             al_draw_bitmap_region(lobo,largura_lobo*(int)frame_lobo,current_frame_y_lobo,130,120,(int)lobo_x,(int)lobo_y,0);
         }
         al_flip_display();
