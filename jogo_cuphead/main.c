@@ -110,6 +110,7 @@ int main() {
                     contador = 0;
                     al_stop_samples(); // Para o �udio do jogo
                     al_play_sample(menu_audio, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, NULL); // Loop no menu
+                    lobo_x = -50;
 
                     // Restaura o estado inicial
                     Menu = al_load_bitmap("./imagens/Menu.JPG");
@@ -267,7 +268,14 @@ int main() {
             }
 
             if(vida_samurai <=0){
-                break;
+                in_menu = true;
+                    vida_lobo = 100;
+                    vida_samurai = 200;
+                    contador = 0;
+                    al_stop_samples(); // Para o �udio do jogo
+                    al_play_sample(menu_audio, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, NULL);
+                     Menu = al_load_bitmap("./imagens/Menu.JPG");
+                    lobo_x = -50;
             }
 
 
