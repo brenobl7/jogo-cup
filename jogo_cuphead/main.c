@@ -314,18 +314,18 @@ int main() {
             al_draw_bitmap_region(lobo,largura_lobo*(int)frame_lobo,current_frame_y_lobo,130,120,(int)lobo_x,(int)lobo_y,0);
         }
 
-        if(contador == 20){
+        if(contador == 2){
 
-        al_clear_to_color(al_map_rgb(0, 0, 0));
-        al_draw_text(fonte, al_map_rgb(255, 255, 255), 180, 200, 0, "Parabens!");
-        al_draw_text(fonte, al_map_rgb(255, 255, 255), 180, 230, 0, "Voce terminou o jogo.");
+            al_clear_to_color(al_map_rgb(0, 0, 0));
+            al_draw_text(fonte, al_map_rgb(255, 255, 255), 180, 200, 0, "Parabens!");
+            al_draw_text(fonte, al_map_rgb(255, 255, 255), 180, 230, 0, "Voce terminou o jogo.");
 
 
 
-        al_stop_samples();
-        al_play_sample(final2_audio, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, NULL);
+            al_stop_samples();
+            //al_play_sample(final2_audio, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, NULL);
 
-}
+        }
         al_flip_display();
 
     }
