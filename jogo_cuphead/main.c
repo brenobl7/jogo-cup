@@ -31,7 +31,6 @@ int main() {
     ALLEGRO_EVENT_QUEUE* event_queue = al_create_event_queue();
     ALLEGRO_SAMPLE* menu_audio = al_load_sample("./audios/menu.OGG");
     ALLEGRO_SAMPLE* jogo_audio = al_load_sample("./audios/boss1.OGG");
-        ALLEGRO_SAMPLE* final2_audio = al_load_sample("./audios/final.OGG");
     ALLEGRO_FONT* fonte = al_load_font("./fonte.ttf",30,0);
     ALLEGRO_FONT* vida = al_load_font("./fonte.ttf",30,0);
 
@@ -314,7 +313,7 @@ int main() {
             al_draw_bitmap_region(lobo,largura_lobo*(int)frame_lobo,current_frame_y_lobo,130,120,(int)lobo_x,(int)lobo_y,0);
         }
 
-        if(contador == 2){
+        if(contador == 10){
 
             al_clear_to_color(al_map_rgb(0, 0, 0));
             al_draw_text(fonte, al_map_rgb(255, 255, 255), 180, 200, 0, "Parabens!");
@@ -323,7 +322,6 @@ int main() {
 
 
             al_stop_samples();
-            //al_play_sample(final2_audio, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, NULL);
 
         }
         al_flip_display();
