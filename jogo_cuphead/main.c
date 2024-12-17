@@ -29,7 +29,7 @@ int main() {
     ALLEGRO_BITMAP* lobo = al_load_bitmap("./imagens/teste.PNG");
     ALLEGRO_TIMER* timer = al_create_timer(1.0 / 60.0);
     ALLEGRO_EVENT_QUEUE* event_queue = al_create_event_queue();
-    ALLEGRO_SAMPLE* menu_audio = al_load_sample("./audios/menu.OGG");
+    ALLEGRO_SAMPLE* menu_audio = al_load_sample("./audios/boss2.OGG");
     ALLEGRO_SAMPLE* jogo_audio = al_load_sample("./audios/boss1.OGG");
     ALLEGRO_FONT* fonte = al_load_font("./fonte.ttf",30,0);
     ALLEGRO_FONT* vida = al_load_font("./fonte.ttf",30,0);
@@ -60,7 +60,7 @@ int main() {
     bool lobo_direita = false,lobo_esquerda = false, lobo_ataque = false, ultimo_clique = NULL ; // variaveis de movimento
     int largura_lobo = 138 ;//  largura da sprite lobo
     int vida_samurai = 200; //vida do samurai
-    int vida_lobo = 100; //vida lobo
+    int vida_lobo = 200; //vida lobo
     int contador = 0;
 
     // Configurando eventos
@@ -190,12 +190,12 @@ int main() {
                     }
                 }
                 if (facing_left==true && pos_x-70 <=lobo_x+40 && lobo_x <= pos_x-10 ){//ataque esquerda
-                    vida_lobo -= 0.5;
+                    vida_lobo -= 1.5;
 
 
                 }
                  if (facing_left==false && pos_x+90 >=lobo_x-40 && lobo_x >= pos_x+10 ){//ataque direita (fazer)
-                    vida_lobo -= 0.5;
+                    vida_lobo -= 1.5;
 
 
                 }
@@ -313,17 +313,24 @@ int main() {
             al_draw_bitmap_region(lobo,largura_lobo*(int)frame_lobo,current_frame_y_lobo,130,120,(int)lobo_x,(int)lobo_y,0);
         }
 
-        if(contador == 10){
+        if(contador == 5){
 
             al_clear_to_color(al_map_rgb(0, 0, 0));
-            al_draw_text(fonte, al_map_rgb(255, 255, 255), 180, 200, 0, "Parabens!");
-            al_draw_text(fonte, al_map_rgb(255, 255, 255), 180, 230, 0, "Voce terminou o jogo.");
+            al_draw_text(fonte, al_map_rgb(255, 255, 255), 300, 200, 0, "Parabens!");
+            al_draw_text(fonte, al_map_rgb(255, 255, 255), 180, 270, 0, "Voce terminou o jogo.");
 
 
 
             al_stop_samples();
 
         }
+        if(pos_x <= -50){
+            pos_x = -50;
+        }
+        if(pos_x >= 672){
+            pos_x = 672;
+        }
+
         al_flip_display();
 
     }
