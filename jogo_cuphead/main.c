@@ -60,7 +60,7 @@ int main() {
     bool lobo_direita = false,lobo_esquerda = false, lobo_ataque = false, ultimo_clique = NULL ; // variaveis de movimento
     int largura_lobo = 138 ;//  largura da sprite lobo
     int vida_samurai = 200; //vida do samurai
-    int vida_lobo = 200; //vida lobo
+    int vida_lobo = 150; //vida lobo
     int contador = 0;
 
     // Configurando eventos
@@ -269,8 +269,8 @@ int main() {
             }
 
             if(vida_samurai <=0){
-                in_menu = true;
-                    vida_lobo = 100;
+                    in_menu = true;
+                    vida_lobo = 150;
                     vida_samurai = 200;
                     contador = 0;
                     al_stop_samples(); // Para o ï¿½udio do jogo
@@ -290,7 +290,7 @@ int main() {
                 lobo_ataque = false;
                 lobo_esquerda = false;
                 ultimo_clique = false;
-                vida_lobo = 100;
+                vida_lobo = 150;
                 int k = rand() % 2;
                 if (k == 0){
                     lobo_x = -100;
@@ -300,6 +300,13 @@ int main() {
                 }
                 contador +=1;
 
+            }
+            if(vida_lobo<=90){
+
+                al_draw_textf(vida,al_map_rgb(255,0,0),lobo_x+40,410,0,"%d",vida_lobo);
+            }
+            if(vida_lobo>90){
+                al_draw_textf(vida,al_map_rgb(0,255,0),lobo_x+40,410,0,"%d",vida_lobo);
             }
             al_draw_textf(fonte,al_map_rgb(255,255,255),20,20,0,"SCORE: %d",contador);
             if(vida_samurai>=100){
@@ -313,7 +320,7 @@ int main() {
             al_draw_bitmap_region(lobo,largura_lobo*(int)frame_lobo,current_frame_y_lobo,130,120,(int)lobo_x,(int)lobo_y,0);
         }
 
-        if(contador == 5){
+        if(contador == 10){
 
             al_clear_to_color(al_map_rgb(0, 0, 0));
             al_draw_text(fonte, al_map_rgb(255, 255, 255), 300, 200, 0, "Parabens!");
